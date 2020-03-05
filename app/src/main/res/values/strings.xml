@@ -1,0 +1,22 @@
+<resources>
+    <string name="app_name">revision-app-two</string>
+    <string name="title_psychology">Psychology</string>
+    <string name="title_computing">Computing</string>
+    <string name="title_maths">Maths</string>
+    <string name="subjectHint">Subject</string>
+    <string name="titleHint">Title</string>
+    <string name="contentHint">Notes</string>
+    <string name="newEntry">Add Entry</string>
+    <string name="addItem">Add Item</string>
+    <string name="deleteItem">Delete Item</string>
+
+    <string name="addNote">Add Note</string>
+    <string name="getEntry">Retrieve Entries</string>
+
+    <string-array name="database_array">
+        <item>Psychology</item>
+        <item>Maths</item>
+        <item>Computing</item>
+    </string-array>
+
+</resources>
