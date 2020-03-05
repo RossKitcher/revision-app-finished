@@ -33,8 +33,7 @@ public class AddSubject extends AppCompatActivity {
         if (c.moveToFirst()) {
             do {
                 Toast.makeText(this,
-                        c.getString(c.getColumnIndex(NotesProvider.COL_ID)) +
-                                ", " + c.getString(c.getColumnIndex(NotesProvider.COL_SUBJECT_NAME)),
+                        "Added: " + c.getString(c.getColumnIndex(NotesProvider.COL_SUBJECT_NAME)),
                         Toast.LENGTH_SHORT
                 ).show();
             } while (c.moveToNext());

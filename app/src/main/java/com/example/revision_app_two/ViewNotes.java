@@ -88,10 +88,15 @@ public class ViewNotes extends AppCompatActivity {
             case R.id.action_add:
                 Intent intent = new Intent(this, AddNote.class);
                 startActivity(intent);
+                break;
+            case R.id.action_delete:
+                intent = new Intent(this, RemoveNote.class);
+                startActivity(intent);
+                break;
 
             default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
 
     }
 }

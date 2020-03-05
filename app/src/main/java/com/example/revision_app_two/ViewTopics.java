@@ -45,20 +45,7 @@ public class ViewTopics extends AppCompatActivity {
     public void onResume() {
         super.onResume();
 
-        List<String> topicList = new ArrayList<String>();
-
-        String URL = "content://com.example.revision-app-two.NotesProvider/topics";
-        Uri notes = Uri.parse(URL);
-
-        String modID = MainActivity.getCurrentModuleId(this);
-
-        Cursor c = getContentResolver().query(notes, null, "modID=?", new String[]{modID}, "");
-
-        if (c.moveToFirst()) {
-            do {
-                topicList.add(c.getString(c.getColumnIndex("topName")));
-            } while (c.moveToNext());
-        }
+        List<String> topicList = MainActivity.getTopics(this);
 
         ListView listView = (ListView) findViewById(R.id.topicListView);
 
@@ -95,10 +82,15 @@ public class ViewTopics extends AppCompatActivity {
             case R.id.action_add:
                 Intent intent = new Intent(this, AddTopic.class);
                 startActivity(intent);
+                break;
+            case R.id.action_delete:
+                intent = new Intent(this, RemoveTopic.class);
+                startActivity(intent);
+                break;
 
             default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
 
     }
 }

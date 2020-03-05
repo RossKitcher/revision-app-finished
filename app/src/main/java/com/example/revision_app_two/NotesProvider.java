@@ -75,7 +75,7 @@ public class NotesProvider extends ContentProvider {
     static final String MODULES_TABLE_NAME = "modules";
     static final String TOPICS_TABLE_NAME = "topics";
     static final String CONTENT_TABLE_NAME = "content";
-    static final int DATABASE_VERSION = 4;
+    static final int DATABASE_VERSION = 7;
     static final String CREATE_SUBJECTS_TABLE =
             " create table " + SUBJECTS_TABLE_NAME +
                     " (" + COL_ID + " integer primary key autoincrement, " +

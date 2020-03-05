@@ -9,6 +9,10 @@
     <string name="newEntry">Add Entry</string>
     <string name="addItem">Add Item</string>
     <string name="deleteItem">Delete Item</string>
+    <string name="selectModule">Select module:</string>
+    <string name="selectTopic">Select topic:</string>
+    <string name="selectNote">Select note:</string>
+    <string name="remove">Remove</string>
 
     <string name="addNote">Add Note</string>
     <string name="getEntry">Retrieve Entries</string>

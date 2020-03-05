@@ -53,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
 
         setTitle("Modules");
+
+
     }
 
     @Override
@@ -67,14 +69,21 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         // Handle item selection
+        Intent intent;
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent intent = new Intent(this, AddModule.class);
+                intent = new Intent(this, AddModule.class);
                 startActivity(intent);
+                break;
+            case R.id.action_delete:
+                intent = new Intent(this, RemoveModule.class);
+                startActivity(intent);
+                break;
 
             default:
-                return super.onOptionsItemSelected(item);
         }
+        return super.onOptionsItemSelected(item);
+
 
     }
 
@@ -118,8 +127,14 @@ public class MainActivity extends AppCompatActivity {
         String URL = "content://com.example.revision-app-two.NotesProvider/subjects";
         Uri subUri = Uri.parse(URL);
         Cursor subCursor = context.getContentResolver().query(subUri, new String[] {"_id"}, "subName=?", new String[] {editedFragment},"");
-        subCursor.moveToFirst();
-        String subID = subCursor.getString(subCursor.getColumnIndex(NotesProvider.COL_ID));
+        String subID;
+        if (subCursor.getCount() > 0) {
+            subCursor.moveToFirst();
+            subID = subCursor.getString(subCursor.getColumnIndex(NotesProvider.COL_ID));
+        } else {
+            subID = "none";
+        }
+
         return subID;
     }
 
@@ -132,15 +147,146 @@ public class MainActivity extends AppCompatActivity {
         String id = getCurrentSubjectId(context);
 
         Cursor c = context.getContentResolver().query(notes, null, "subID=?", new String[] {id}, "");
-
-        if (c.moveToFirst()) {
-            do {
-                moduleList.add(c.getString(c.getColumnIndex("modName")));
-            } while (c.moveToNext());
+        if (c.getCount() > 0) {
+            if (c.moveToFirst()) {
+                do {
+                    moduleList.add(c.getString(c.getColumnIndex("modName")));
+                } while (c.moveToNext());
+            }
         }
+
 
         return moduleList;
     }
+
+    public static List<String> getTopics(Context context) {
+        List<String> topicList = new ArrayList<String>();
+
+        String URL = "content://com.example.revision-app-two.NotesProvider/topics";
+        Uri notes = Uri.parse(URL);
+
+        String modID = getCurrentModuleId(context);
+
+        Cursor c = context.getContentResolver().query(notes, null, "modID=?", new String[]{modID}, "");
+
+        if (c.moveToFirst()) {
+            do {
+                topicList.add(c.getString(c.getColumnIndex("topName")));
+            } while (c.moveToNext());
+        }
+
+        return topicList;
+    }
+
+    public static List<String> getNotes(Context context) {
+        List<String> notesList = new ArrayList<String>();
+
+        String URL = "content://com.example.revision-app-two.NotesProvider/content";
+        Uri notes = Uri.parse(URL);
+
+        String modID = getCurrentTopicId(context);
+
+        Cursor c = context.getContentResolver().query(notes, null, "topID=?", new String[]{modID}, "");
+
+        if (c.moveToFirst()) {
+            do {
+                notesList.add(c.getString(c.getColumnIndex("note")));
+            } while (c.moveToNext());
+        }
+
+        return notesList;
+    }
+
+    public static String getSelectedModID(Context context, String selected) {
+
+        String URL = "content://com.example.revision-app-two.NotesProvider/modules";
+        Uri subUri = Uri.parse(URL);
+        Cursor subCursor = context.getContentResolver().query(subUri, new String[] {"_id"}, "modName=?", new String[] {selected},"");
+        subCursor.moveToFirst();
+        String modID = subCursor.getString(subCursor.getColumnIndex(NotesProvider.COL_ID));
+        return modID;
+    }
+    public static String getSelectedTopID(Context context, String selected) {
+
+        String URL = "content://com.example.revision-app-two.NotesProvider/topics";
+        Uri subUri = Uri.parse(URL);
+        Cursor subCursor = context.getContentResolver().query(subUri, new String[] {"_id"}, "topName=?", new String[] {selected},"");
+        subCursor.moveToFirst();
+        String topID = subCursor.getString(subCursor.getColumnIndex(NotesProvider.COL_ID));
+        return topID;
+    }
+
+    public static void removeTopicFromTopID(Context context, String topID) {
+
+        String notesURL = "content://com.example.revision-app-two.NotesProvider/content";
+        Uri notes = Uri.parse(notesURL);
+
+        context.getContentResolver().delete(notes, "topID=?", new String[]{topID});
+
+        String topicURL = "content://com.example.revision-app-two.NotesProvider/topics";
+        Uri topics = Uri.parse(topicURL);
+        context.getContentResolver().delete(topics, "_id=?", new String[]{topID});
+    }
+
+    public static String getTopIDFromModID(Context context, String modID) {
+        String URL = "content://com.example.revision-app-two.NotesProvider/topics";
+        Uri subUri = Uri.parse(URL);
+        Cursor subCursor = context.getContentResolver().query(subUri, new String[] {"_id"}, "modID=?", new String[] {modID},"");
+        String topID;
+        if (subCursor.getCount() > 0) {
+            subCursor.moveToFirst();
+            topID = subCursor.getString(subCursor.getColumnIndex(NotesProvider.COL_ID));
+        } else {
+            topID = "none";
+        }
+
+
+        return topID;
+    }
+
+    public static void removeModuleFromModID(Context context, String modID) {
+
+
+
+        String id  =getTopIDFromModID(context, modID);
+
+        if (!id.equals("none")) {
+            removeTopicFromTopID(context, id);
+        }
+
+
+        String topicURL = "content://com.example.revision-app-two.NotesProvider/modules";
+        Uri topics = Uri.parse(topicURL);
+        context.getContentResolver().delete(topics, "_id=?", new String[]{modID});
+    }
+
+    public static void removeSelectedNote(Context context, String selected) {
+        String noteURL = "content://com.example.revision-app-two.NotesProvider/content";
+        Uri notes = Uri.parse(noteURL);
+        context.getContentResolver().delete(notes, "note=?", new String[]{selected});
+    }
+
+    public static void seedDatabase(Context context) {
+        ContentValues computing = new ContentValues();
+        computing.put(NotesProvider.COL_SUBJECT_NAME, "Computing");
+
+        context.getContentResolver().insert(NotesProvider.SUBJECT_CONTENT_URI, computing);
+
+        ContentValues psychology = new ContentValues();
+        psychology.put(NotesProvider.COL_SUBJECT_NAME, "Psychology");
+
+        context.getContentResolver().insert(NotesProvider.SUBJECT_CONTENT_URI, psychology);
+
+        ContentValues maths = new ContentValues();
+        maths.put(NotesProvider.COL_SUBJECT_NAME, "Maths");
+
+        context.getContentResolver().insert(NotesProvider.SUBJECT_CONTENT_URI, maths);
+
+    }
+
+
+
+
 
 
 

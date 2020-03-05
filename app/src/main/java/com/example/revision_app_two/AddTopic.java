@@ -24,7 +24,7 @@ public class AddTopic extends AppCompatActivity {
 
         pref = getBaseContext().getSharedPreferences("Pref", 0);
         activeFragment = pref.getString("currentMod", "");
-        setTitle("Add Module To " + activeFragment);
+        setTitle("Add Topic To " + activeFragment);
 
         Toolbar myChildToolbar = (Toolbar) findViewById(R.id.tool_bar);
         setSupportActionBar(myChildToolbar);
@@ -46,7 +46,7 @@ public class AddTopic extends AppCompatActivity {
 
         Uri uri = getContentResolver().insert(NotesProvider.TOPIC_CONTENT_URI, values);
 
-        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Added Topic", Toast.LENGTH_LONG).show();
     }
     public void onClickRetrieveTopic(View view) {
         String URL = "content://com.example.revision-app-two.NotesProvider/topics";
@@ -55,9 +55,7 @@ public class AddTopic extends AppCompatActivity {
         if (c.moveToFirst()) {
             do {
                 Toast.makeText(this,
-                        c.getString(c.getColumnIndex(NotesProvider.COL_ID)) +
-                                ", " + c.getString(c.getColumnIndex(NotesProvider.COL_TOPIC_NAME)) +
-                                ", " + c.getString(c.getColumnIndex(NotesProvider.COL_MODULE_ID)),
+                        "Added: " + c.getString(c.getColumnIndex(NotesProvider.COL_MODULE_ID)),
                         Toast.LENGTH_SHORT
                 ).show();
             } while (c.moveToNext());

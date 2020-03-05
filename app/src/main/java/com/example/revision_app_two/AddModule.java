@@ -37,6 +37,14 @@ public class AddModule extends AppCompatActivity {
 
         // Enable the Up button
         ab.setDisplayHomeAsUpEnabled(true);
+
+        String URL = "content://com.example.revision-app-two.NotesProvider/subjects";
+        Uri subUri = Uri.parse(URL);
+        Cursor subCursor = getContentResolver().query(subUri, new String[] {"_id"}, null, null,"");
+
+        if (subCursor.getCount() <= 0) {
+            MainActivity.seedDatabase(this);
+        }
     }
 
     public void onClickAddModule(View view) {
@@ -54,9 +62,9 @@ public class AddModule extends AppCompatActivity {
         values.put(NotesProvider.COL_MODULE_NAME, ((EditText)findViewById(R.id.addModule)).getText().toString());
         values.put(NotesProvider.COL_SUBJECT_ID, Integer.parseInt(subID));
 
-        Uri uri = getContentResolver().insert(NotesProvider.MODULE_CONTENT_URI, values);
+        getContentResolver().insert(NotesProvider.MODULE_CONTENT_URI, values);
 
-        Toast.makeText(getBaseContext(), uri.toString(), Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), "Added Module", Toast.LENGTH_SHORT).show();
     }
     public void onClickRetrieveModules(View view) {
         String URL = "content://com.example.revision-app-two.NotesProvider/modules";
@@ -65,9 +73,7 @@ public class AddModule extends AppCompatActivity {
         if (c.moveToFirst()) {
             do {
                 Toast.makeText(this,
-                        c.getString(c.getColumnIndex(NotesProvider.COL_ID)) +
-                                ", " + c.getString(c.getColumnIndex(NotesProvider.COL_MODULE_NAME)) +
-                                ", " + c.getString(c.getColumnIndex(NotesProvider.COL_SUBJECT_ID)),
+                        "Added: " + c.getString(c.getColumnIndex(NotesProvider.COL_SUBJECT_ID)),
                         Toast.LENGTH_SHORT
                 ).show();
             } while (c.moveToNext());

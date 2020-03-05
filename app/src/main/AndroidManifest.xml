@@ -9,7 +9,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".RemoveData"></activity>
+        <activity android:name=".RemoveNote" android:parentActivityName=".ViewNotes">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.revision_app_two.ViewNotes" />
+        </activity>
+        <activity android:name=".RemoveTopic" android:parentActivityName=".ViewTopics">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.revision_app_two.ViewTopics" />
+        </activity>
+        <activity android:name=".RemoveModule" android:parentActivityName=".MainActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.revision_app_two.MainActivity" />
+        </activity>
+        <activity android:name=".RemoveData" />
         <activity
             android:name=".ViewNotes"
             android:parentActivityName=".ViewTopics">
@@ -39,7 +54,11 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.revision_app_two.ViewTopics" />
         </activity>
-        <activity android:name=".AddNote" />
+        <activity android:name=".AddNote" android:parentActivityName=".ViewNotes">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.revision_app_two.ViewNotes" />
+        </activity>
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name">
