@@ -321,8 +321,4 @@ public class NotesProvider extends ContentProvider {
         }
     }
 
-
-
-
-
 }
